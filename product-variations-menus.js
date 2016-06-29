@@ -102,52 +102,52 @@
                                 variableIds: variableIds
                             }, function(data) {
                                 
-                                var obj = JSON.parse(data);
+                                var variation = JSON.parse(data);
                                 if (
-                                    obj
-                                    && settings.onVariationData.call(obj)
+                                    variation
+                                    && settings.onVariationData.call(variation)
                                 ) {
                                     // Deprecated functionality that should now be explicitly set within the callback
                                     if (
-                                        obj.id 
+                                        variation.id 
                                         && variationIdField
                                     ) {
-                                        variationIdField.val(obj.id);
+                                        variationIdField.val(variation.id);
                                     }
                                     
                                     var priceSpan = container.find(settings.priceSelector);
-                                    if (obj.price) {
-                                        priceSpan.html(obj.price);
+                                    if (variation.price) {
+                                        priceSpan.html(variation.price);
                                     }
                                     
                                     var comparisonPrice = container.find(settings.comparisonSelector);
-                                    if (obj.comparison_price) {
+                                    if (variation.comparisonPrice) {
                                         comparisonPrice.show();
-                                        comparisonPrice.find('span').html(obj.comparison_price);
+                                        comparisonPrice.find('span').html(variation.comparisonPrice);
                                     }
                                     
-                                    if (obj.was) {
+                                    if (variation.was) {
                                         container.find(settings.comparisonSelector)
                                             .show()
                                         	.find('span')
-                                            	.html(obj.was);
+                                            	.html(variation.was);
 
                                         container.find(settings.savingSelector)
                                             .show()
                                         	.find('span')
-                                            	.html(obj.saving);
+                                            	.html(variation.saving);
 
                                         container.find('p.price').addClass('sale');
                                     }
                                     
                                     if (
-                                        obj.discount_percentage
-                                        && obj.discount_percentage != '0'
+                                        variation.discountPercentage
+                                        && variation.discountPercentage != '0'
                                     ) {
                                         container.find(settings.discountSelector)
                                             .show()
                                             .find('span')
-                                            	.html(obj.discount_percentage);
+                                            	.html(variation.discountPercentage);
                                     }
 
                                     // Clear the price label, which normally contains 'from'
