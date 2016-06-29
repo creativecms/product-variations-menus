@@ -26,7 +26,7 @@
                 // Set elements
         	    menus = container.find('[data-variations-menu]'),
         	    button = container.find('[data-variations-menus-button]'),
-        	    variationIdField = container.find('[data-variation-id]'),
+        	    variationIdField = container.find(settings.variationIdSelector),
         	    
                 selectedVariableIds = JSON.parse(container.attr('data-selected-variable-ids')),
                 variableIds;
@@ -107,7 +107,10 @@
                                     variation
                                     && settings.onVariationData.call(variation)
                                 ) {
-                                    // Deprecated functionality that should now be explicitly set within the callback
+                                    var formatPrice = function(price) {
+                                    	return price.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+                                    }
+                                    
                                     if (
                                         variation.id 
                                         && variationIdField
@@ -117,25 +120,25 @@
                                     
                                     var priceSpan = container.find(settings.priceSelector);
                                     if (variation.price) {
-                                        priceSpan.html(variation.price);
+                                        priceSpan.html(formatPrice(variation.price));
                                     }
                                     
                                     var comparisonPrice = container.find(settings.comparisonSelector);
                                     if (variation.comparisonPrice) {
                                         comparisonPrice.show();
-                                        comparisonPrice.find('span').html(variation.comparisonPrice);
+                                        comparisonPrice.find('span').html(formatPrice(variation.comparisonPrice));
                                     }
                                     
                                     if (variation.was) {
                                         container.find(settings.comparisonSelector)
                                             .show()
                                         	.find('span')
-                                            	.html(variation.was);
+                                            	.html(formatPrice(variation.was));
 
                                         container.find(settings.savingSelector)
                                             .show()
                                         	.find('span')
-                                            	.html(variation.saving);
+                                            	.html(formatPrice(variation.saving));
 
                                         container.find('p.price').addClass('sale');
                                     }
