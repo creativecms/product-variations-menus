@@ -11,13 +11,7 @@
             var defaults = {
                     onVariationData: function() {
                         return true; // Must return true to execute the default functionality
-                    },
-                    variationIdSelector: '[data-variation-id]',
-                    priceSelector: '.price-price',
-                    comparisonSelector: '.price-comparison',
-                    savingSelector: '.price-saving',
-                    discountSelector: '.price-discount',
-                    priceLabelSelector: '.price-label',
+                    }
                 },
                 settings = $.extend({}, defaults, options),
                 container = $(this),
@@ -26,7 +20,6 @@
                 // Set elements
         	    menus = container.find('[data-variations-menu]'),
         	    button = container.find('[data-variations-menus-button]'),
-        	    variationIdField = container.find(settings.variationIdSelector),
         	    
                 selectedVariableIds = JSON.parse(container.attr('data-selected-variable-ids')),
                 variableIds;
@@ -40,64 +33,12 @@
                 	productId: productId,
                     variableIds: variableIds
                 }, function(data) {
-                    
                     var variation = JSON.parse(data);
-                    if (
-                        variation
-                        && settings.onVariationData.call(variation)
-                    ) {
-                        var formatPrice = function(price) {
-                        	return price.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-                        }
-                        
-                        if (
-                            variation.id 
-                            && variationIdField
-                        ) {
-                            variationIdField.val(variation.id);
-                        }
-                        
-                        var priceSpan = container.find(settings.priceSelector);
-                        if (variation.price) {
-                            priceSpan.html(formatPrice(variation.price));
-                        }
-                        
-                        var comparisonPrice = container.find(settings.comparisonSelector);
-                        if (variation.comparisonPrice) {
-                            comparisonPrice.show();
-                            comparisonPrice.find('span').html(formatPrice(variation.comparisonPrice));
-                        }
-                        
-                        if (variation.was) {
-                            container.find(settings.comparisonSelector)
-                                .show()
-                            	.find('span')
-                                	.html(formatPrice(variation.was));
-
-                            container.find(settings.savingSelector)
-                                .show()
-                            	.find('span')
-                                	.html(formatPrice(variation.saving));
-
-                            container.find('p.price').addClass('sale');
-                        }
-                        
-                        if (
-                            variation.discountPercentage
-                            && variation.discountPercentage != '0'
-                        ) {
-                            container.find(settings.discountSelector)
-                                .show()
-                                .find('span')
-                                	.html(variation.discountPercentage);
-                        }
-
-                        // Clear the price label, which normally contains 'from'
-                        container.find(settings.priceLabelSelector).hide();
+                    if (variation) {
+                        settings.onVariationData(container, variation);
                     }
                     
              		button.removeAttr('disabled');
-                    
                     $('body').css('cursor', 'inherit');
                 });
             }
@@ -144,7 +85,7 @@
                         
                             if (nextMenu.length) {
                                 var nextOptionId = $(nextMenu).attr('data-variations-menu');
-                                                                
+                                
                                 $.get('/admin/controller/ProductVariations/getVariationsMenuData', {
                                 	productId: productId,
                                     optionId: nextOptionId,
