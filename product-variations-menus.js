@@ -41,8 +41,6 @@
                 menus.each(function(key, el) {
                     $(el)
                         .on('change', function(e) {
-                            var nextMenu = $( menus.get( key + 1 ) );
-                            
                             resetSubsequentMenus(key);
                             
                             // If the user selects all menus but then moves backwards
@@ -51,6 +49,7 @@
                             
                             $('body').css('cursor', 'wait');
                             
+                            var nextMenu = menus.eq(key + 1);
                             if (nextMenu.length) {
                                 var nextOptionId = $(nextMenu).attr('data-variations-menu');
                                 
