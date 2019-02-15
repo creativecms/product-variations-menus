@@ -11,7 +11,7 @@
             var defaults = {
                 onVariationData: function() {
                     return true; // Must return true to execute the default functionality
-                },
+                }
             };
             
             var settings = $.extend({}, defaults, options);
@@ -35,16 +35,13 @@
             
             // If the product has only a single variation then there will be no menus presented.
             // In this case run the request immediately to set the price and variation ID.
-            if (menus.length == 0) {
+            if (menus.length === 0) {
                 requestData();
             } else {
                 menus.each(function(key, el) {
                     $(el)
                         .on('change', function(e) {
-                            var el = $(this);
-                            var optionId = el.attr('data-variations-menu');
                             var nextMenu = $( menus.get( key + 1 ) );
-                            var variableId = parseInt(el.val());
                             
                             resetSubsequentMenus(key);
                             
@@ -112,9 +109,8 @@
                 var variableIds = {};
                 var a = key >= 0 ? menus.slice(0, key + 1) : menus;
                 $.each(a, function(key, menu) {
-                    var optionId = $(menu).attr('data-variations-menu'),
-                        variableId = parseInt($(menu).val());
-                    variableIds[optionId] = variableId;
+                    var optionId = $(menu).attr('data-variations-menu');
+                    variableIds[optionId] = parseInt($(menu).val());
                 });
                 return variableIds;
             }
@@ -135,7 +131,6 @@
                         variableIds: getVariableIds(),
                         raw: true
                     },
-                    //headers: headers,
                     success: function(variation) {
                         if (variation) {
                             // todo - Add if condition and if returns false don't use default script below.
@@ -155,7 +150,7 @@
                 var comparisonPrice = parseFloat(variation.comparisonPrice);
                 var price = parseFloat(variation.price);
                 
-                var comparisonPrice = comparisonPrice ? comparisonPrice : price;
+                comparisonPrice = comparisonPrice ? comparisonPrice : price;
                 
                 //
                 if (discountPercentage) {
@@ -171,12 +166,14 @@
                         maximumFractionDigits: 0
                     }).format(discountPercentage);
                 }
+                /*
                 console.log({
                     comparisonPrice: comparisonPrice,
                     price: price,
                     savingAmount: savingAmount,
                     discountPercentage: discountPercentage
                 });
+                //*/
                 
                 setHiddenFields(variation);
                 
